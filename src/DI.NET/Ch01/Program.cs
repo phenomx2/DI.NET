@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Configuration;
 using System.IO;
 
 namespace Ch01
@@ -7,7 +8,10 @@ namespace Ch01
     {
         static void Main(string[] args)
         {
-            IMessageWriter writer = new ConsoleMessageWritter();
+            var typeName = ConfigurationManager.AppSettings["messageWriter"];
+            var type = Type.GetType(typeName, true);
+            IMessageWriter writer = (IMessageWriter)Activator.CreateInstance(type);
+            //IMessageWriter writer = new ConsoleMessageWritter();
             Saludation saludation = new Saludation(writer);
 
             saludation.Exclaim();
